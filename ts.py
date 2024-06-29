@@ -21,7 +21,7 @@ def get_desktop_path():
 
 
 # Set the title of the web application
-st.title('Data Visualization')
+st.title('Data Visualization (PCA, t-SNE, UMAP)')
 
 # dataFile = pd.read_csv(r'C:\Users\lishuaibing\Desktop\test.csv')
 dataFile = pd.read_csv('test.csv')
