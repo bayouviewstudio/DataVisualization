@@ -114,7 +114,7 @@ if data_file is not None:
 
             axs[0].set_xlabel(f'PC1 ({pca.explained_variance_ratio_[0]*100:.2f}%)')
             axs[0].set_ylabel(f'PC2 ({pca.explained_variance_ratio_[1]*100:.2f}%)')
-            axs[0].legend(title="Types", loc='upper left', bbox_to_anchor=(-0.30, 1))
+            axs[0].legend(title="Types", loc='upper left', bbox_to_anchor=(-0.35, 1))
             axs[0].set_aspect('equal', adjustable='datalim')
             axs[0].set_title('PCA Scatter Plot')
 
