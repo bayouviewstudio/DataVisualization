@@ -176,16 +176,14 @@ if data_file is not None:
 
 
     # Save image
-    save_button = st.button('Save Image')
-    if save_button:
-        try:
-            buffer = BytesIO()
-            filename = "Vis_Result"
-            format_choice = st.radio('Select file format', ['PNG', 'PDF'])
-            st.session_state.fig.savefig(buffer, format=format_choice.lower())
-            st.download_button(label="Download image",
-                               data=buffer.getvalue(),
-                               file_name=f"{filename}.{format_choice.lower()}",
-                               mime=f"image/{format_choice.lower()}")
-        except Exception as e:
-            st.error(f"Failed to save image: {str(e)}")
+    try:
+        buffer = BytesIO()
+        if st.session_state.fig:
+            st.session_state.fig.savefig(buffer, format='pdf', bbox_inches='tight')
+            buffer.seek(0)
+            st.download_button(label="Download PDF", data=buffer, file_name="Vis_Result.pdf", mime="application/pdf")
+            st.success("PDF generated and ready for download.")
+        else:
+            st.error("No figure to save.")
+    except Exception as e:
+        st.error(f"An error occurred: {str(e)}")
