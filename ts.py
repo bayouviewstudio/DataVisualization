@@ -13,6 +13,7 @@ from sklearn.manifold import TSNE
 from umap import UMAP
 import random
 import os
+from io import BytesIO
 
 def get_desktop_path():
     """Returns the path to the desktop depending on the OS."""
@@ -21,10 +22,10 @@ def get_desktop_path():
 
 
 # Set the title of the web application
-st.title('Data Visualization (PCA, t-SNE and UMAP)')
+st.title('Data Visualization (PCA, t-SNE, UMAP)')
 
-# dataFile = pd.read_csv(r'C:\Users\lishuaibing\Desktop\test.csv')
-dataFile = pd.read_csv('test.csv')
+dataFile = pd.read_csv(r'C:\Users\lishuaibing\Desktop\test.csv')
+# dataFile = pd.read_csv('test.csv')
 st.subheader('Example')
 st.dataframe(dataFile)
 
@@ -173,19 +174,17 @@ if data_file is not None:
             pass
 
 
-    # Save button and functionality
-    filepath = st.text_input('Save file path', get_desktop_path())
-    filename = st.text_input('Input filename', "visualization")
-    format_choice = st.radio('Select file format', ['PNG', 'PDF'])
-
-    save_button = st.button('Save')
-    if save_button and st.session_state.fig:
-        full_path = os.path.join(filepath, f"{filename}.{format_choice.lower()}")
+    # Save image
+    save_button = st.button('Save Image')
+    if save_button:
         try:
-            st.session_state.fig.savefig(full_path, format=format_choice.lower(), bbox_inches='tight')
-            st.success(f"The image has been saved as {format_choice.upper()} at {full_path}")
+            buffer = BytesIO()
+            filename = "Vis_Result"
+            format_choice = st.radio('Select file format', ['PNG', 'PDF'])
+            st.session_state.fig.savefig(buffer, format=format_choice.lower())
+            st.download_button(label="Download image",
+                               data=buffer.getvalue(),
+                               file_name=f"{filename}.{format_choice.lower()}",
+                               mime=f"image/{format_choice.lower()}")
         except Exception as e:
-            st.error(f"Save failed: {str(e)}")
-
-
-# # streamlit run D:/DLearning/myGMT/ts.py --server.enableXsrfProtection=false
+            st.error(f"Failed to save image: {str(e)}")
